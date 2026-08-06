@@ -1,0 +1,18 @@
+model:
+  architecture: resnet18
+  num_classes: 10
+training:
+  epochs: 1
+  batch_size: 16
+  learning_rate: 0.001
+  early_stopping_patience: 1
+data:
+  dataset: cifar10
+  data_dir: data
+  num_workers: 0
+  max_train_samples: 128
+  max_val_samples: 64
+output:
+  checkpoint_dir: checkpoints
+  model_name: classifier_smoke.pt
+
