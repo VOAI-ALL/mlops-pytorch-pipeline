@@ -1,0 +1,13 @@
+.git
+.github
+.pytest_cache
+__pycache__
+*.pyc
+.venv
+data
+checkpoints
+docs
+tests
+assignment.pdf
+test_image.png
+

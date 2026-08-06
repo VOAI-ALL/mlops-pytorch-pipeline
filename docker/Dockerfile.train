@@ -1,0 +1,22 @@
+FROM python:3.11-slim AS builder
+
+WORKDIR /build
+COPY requirements/train.txt requirements/train.txt
+RUN python -m pip install --no-cache-dir --upgrade pip \
+    && python -m pip wheel --no-cache-dir --wheel-dir /wheels -r requirements/train.txt
+
+FROM python:3.11-slim AS training
+
+WORKDIR /app
+COPY --from=builder /wheels /wheels
+RUN python -m pip install --no-cache-dir /wheels/* \
+    && rm -rf /wheels
+
+COPY src/ src/
+COPY configs/ configs/
+
+ENV PYTHONUNBUFFERED=1 \
+    CONFIG_PATH=/app/configs/training_config.yaml
+
+ENTRYPOINT ["python", "-m", "src.train"]
+
