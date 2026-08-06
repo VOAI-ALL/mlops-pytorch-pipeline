@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.pytest-tmp/
+.coverage
+htmlcov/
+
+# Environments and local configuration
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+
+# ML data and outputs
+data/
+checkpoints/
+*.pt
+*.pth
+test_image.png
+
+# Validation evidence is generated locally
+docs/evidence/*
+!docs/evidence/README.md
+
+# IDE and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Source assignment is not part of the public submission
+assignment.pdf
