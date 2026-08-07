@@ -1,7 +1,7 @@
 # Pull Request Description Drafts
 
-These drafts must be checked against the actual diff and test results before use.
-Replace every `TODO` and obtain approval before creating a PR.
+These drafts must be checked against the actual PR diff and CI result before use.
+Obtain approval before creating each PR.
 
 ## PR 1 - Project foundation (Week 1)
 
@@ -15,7 +15,8 @@ Replace every `TODO` and obtain approval before creating a PR.
 
 ### Validation
 
-- `TODO: exact commands and real results`
+- Dependency versions are pinned and both YAML configurations parse successfully.
+- Final end-to-end evidence is indexed in `docs/validation.md`.
 
 ## PR 2 - PyTorch pipeline (Week 1)
 
@@ -29,7 +30,9 @@ Replace every `TODO` and obtain approval before creating a PR.
 
 ### Validation
 
-- `TODO: exact pytest and smoke-training results`
+- Final local suite: 16 tests passed.
+- Smoke training emitted JSON metrics and saved `classifier_smoke.pt`.
+- Local health and prediction endpoints returned successful responses.
 
 ## PR 3 - Docker containerization (Week 2)
 
@@ -43,7 +46,9 @@ Replace every `TODO` and obtain approval before creating a PR.
 
 ### Validation
 
-- `TODO: exact image builds, container logs, and screenshot links`
+- Both Linux/AMD64 images built successfully.
+- Mounted training persisted its checkpoint to the host.
+- Serving ran as user `app`, became healthy, and returned a prediction.
 
 ## PR 4 - Kubernetes deployment (Week 2)
 
@@ -57,7 +62,9 @@ Replace every `TODO` and obtain approval before creating a PR.
 
 ### Validation
 
-- `TODO: exact kubectl results and screenshot links`
+- The training Job completed all ten epochs and persisted `classifier_v1.pt`.
+- Two serving replicas rolled out and passed health/prediction checks.
+- Metrics Server and the 2-5 replica HPA reported valid CPU metrics.
 
 ## Final PR - Develop to main
 
@@ -70,10 +77,11 @@ Replace every `TODO` and obtain approval before creating a PR.
 
 ### Validation evidence
 
-- Local tests: `TODO`
-- Docker training and serving: `TODO`
-- Kubernetes Job and checkpoint: `TODO`
-- Kubernetes serving and prediction: `TODO`
+- Local tests: 16 passed; see `docs/evidence/01-unit-tests.png`.
+- Docker training and serving: see evidence 04-07 in `docs/evidence/`.
+- Kubernetes Job and checkpoint: 10 epochs, 87.77% validation accuracy; see evidence 09.
+- Kubernetes serving and prediction: two Ready replicas and successful API; see evidence 10-11.
+- Autoscaling: valid node/pod metrics and active 2-5 replica HPA; see evidence 12-13.
 
 ### Submission review
 
