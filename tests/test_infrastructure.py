@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 import yaml
@@ -43,6 +44,9 @@ def test_serving_deployment_matches_rubric() -> None:
         "memory": "1Gi",
     }
     assert container["resources"]["limits"] == {"cpu": "1", "memory": "2Gi"}
+    assert container["securityContext"]["runAsNonRoot"] is True
+    assert container["securityContext"]["runAsUser"] == 100
+    assert container["securityContext"]["runAsGroup"] == 101
     checkpoint_mount = next(
         mount
         for mount in container["volumeMounts"]
@@ -75,4 +79,17 @@ def test_dockerfiles_match_rubric() -> None:
     assert "EXPOSE 8080" in serving
     assert "USER app" in serving
     assert "HEALTHCHECK" in serving
+
+
+def test_kind_metrics_server_patch_enables_local_kubelet_tls() -> None:
+    patch = json.loads(
+        Path("k8s/metrics-server-kind-patch.json").read_text(encoding="utf-8")
+    )
+    assert patch == [
+        {
+            "op": "add",
+            "path": "/spec/template/spec/containers/0/args/-",
+            "value": "--kubelet-insecure-tls",
+        }
+    ]
 

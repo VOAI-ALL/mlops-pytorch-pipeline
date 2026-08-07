@@ -196,9 +196,9 @@ If `kubectl top nodes` reports that the Metrics API is unavailable, install
 Metrics Server before assessing HPA metrics:
 
 ```powershell
-kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.8.1/components.yaml
 kubectl patch deployment metrics-server -n kube-system --type=json `
-  -p='[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--kubelet-insecure-tls"}]'
+  --patch-file k8s/metrics-server-kind-patch.json
 kubectl rollout status deployment/metrics-server -n kube-system
 kubectl top nodes
 ```
@@ -252,4 +252,3 @@ Follow [docs/validation.md](docs/validation.md) while capturing genuine terminal
 output or screenshots. Review [docs/submission-checklist.md](docs/submission-checklist.md)
 before submitting the public repository URL, final PR URL, and personalized
 reflection.
-
