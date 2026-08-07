@@ -86,7 +86,7 @@ Obtain approval before creating each PR.
 
 ### Submission review
 
-- [ ] All four feature PRs are merged.
-- [ ] All screenshots/logs are genuine and readable.
-- [ ] README architecture and setup instructions are current.
-- [ ] Reflection is personalized and 300–500 words.
+- [x] All four feature PRs are merged.
+- [x] All screenshots/logs are genuine and readable.
+- [x] README architecture and setup instructions are current.
+- [x] Reflection is personalized and 300-500 words.
