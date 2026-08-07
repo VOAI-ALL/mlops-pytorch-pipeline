@@ -1,0 +1,29 @@
+FROM python:3.11-slim AS builder
+
+WORKDIR /build
+COPY requirements/serve.txt requirements/serve.txt
+RUN python -m pip install --no-cache-dir --upgrade pip \
+    && python -m pip wheel --no-cache-dir --wheel-dir /wheels -r requirements/serve.txt
+
+FROM python:3.11-slim AS serving
+
+WORKDIR /app
+COPY --from=builder /wheels /wheels
+RUN python -m pip install --no-cache-dir /wheels/* \
+    && rm -rf /wheels \
+    && addgroup --system app \
+    && adduser --system --ingroup app --home /app app
+
+COPY --chown=app:app src/ src/
+
+ENV PYTHONUNBUFFERED=1 \
+    MODEL_PATH=/app/checkpoints/classifier_v1.pt
+
+EXPOSE 8080
+USER app
+
+HEALTHCHECK --interval=10s --timeout=3s --start-period=15s --retries=3 \
+    CMD ["python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health', timeout=2)"]
+
+CMD ["uvicorn", "src.serve:app", "--host", "0.0.0.0", "--port", "8080"]
+
