@@ -2,9 +2,10 @@
 
 ## Repository
 
-- [ ] Public repository is named `mlops-pytorch-pipeline`.
+- [x] Public repository is named `mlops-pytorch-pipeline`.
 - [ ] All final code is on `main` through pull requests.
-- [ ] At least four feature PRs are merged: two labeled Week 1 and two Week 2.
+- [x] At least four feature PRs are merged: two covering Week 1 and two covering
+  Week 2.
 - [x] Commit messages follow Conventional Commits.
 - [ ] CI passes on the final PR.
 - [x] No secrets, datasets, checkpoints, or assignment PDF are committed.
@@ -24,7 +25,7 @@
 
 - [ ] Final PR contains terminal output or screenshots for every required step.
 - [x] Full prediction response is visible in the evidence.
-- [ ] Reflection has been personalized and contains 300–500 words.
+- [x] Reflection has been personalized and contains 300-500 words.
 - [ ] Submit the public GitHub repository URL.
 - [ ] Submit the final validation PR URL.
 - [ ] Submit the final reflection.

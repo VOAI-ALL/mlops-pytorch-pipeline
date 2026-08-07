@@ -1,40 +1,38 @@
-# Reflection Draft
+# Reflection
 
-> Personalize this draft before submission. Keep the final response between 300
-> and 500 words and ensure it reflects your own experience.
+The most challenging part of this assignment was making the same PyTorch
+workflow behave consistently across the MLDL environment, Docker, and
+Kubernetes. The first full test run on Windows produced six `WinError 5`
+permission errors even though nine tests passed. Resolving the temporary-path
+handling and rerunning the suite gave me confidence that the failures were
+environmental rather than model defects. I then used a one-epoch smoke
+configuration before the full run so that configuration loading, metric logging,
+early stopping, and checkpoint creation could be checked without repeatedly
+waiting for a long training cycle.
 
-The most challenging part of this assignment was connecting the training and
-serving stages through storage while keeping each environment reproducible. A
-model that works in a local Python session is only one part of a production-style
-pipeline. The training process also had to accept external configuration, emit
-machine-readable metrics, save enough metadata for inference, and write the
-checkpoint to a location that Docker and Kubernetes could persist. I addressed
-this by keeping paths configurable and storing the architecture, number of
-classes, class names, and model state in the same checkpoint.
+Containerization made the separation between training and inference much
+clearer. I built independent multi-stage images with pinned dependencies,
+mounted the configuration and checkpoint directories, and verified that the
+serving image ran as a non-root user. The health endpoint was especially useful
+because it distinguished a running web process from a service that had actually
+loaded a valid checkpoint. Sending a real image to the prediction endpoint and
+receiving all CIFAR-10 class probabilities confirmed that the checkpoint
+metadata, preprocessing, model reconstruction, and API contract were
+compatible.
 
-Containerizing the workloads highlighted the difference between training and
-inference dependencies. Separate requirement files and Dockerfiles made the
-serving image simpler and prevented development-only packages from being added.
-The serving container also runs as a non-root user and exposes a health check,
-which required the application to distinguish between a running web server and
-a successfully loaded model. Returning an unhealthy response when the checkpoint
-is unavailable makes deployment failures visible instead of silently accepting
-requests.
+Kubernetes introduced the most troubleshooting. During the training Job, the
+log initially appeared to stop at 100%, and following logs through the Job
+returned after only two epochs. Checking the specific pod showed that training
+was still progressing. The completed run reached 87.77% validation accuracy
+after ten epochs and persisted `classifier_v1.pt` for the serving Deployment. I
+then verified two Ready replicas, rolling deployment behavior, health probes,
+the ClusterIP Service, and a successful prediction through port forwarding.
 
-Kubernetes introduced the most infrastructure-related reasoning. The training
-Job is temporary, but its dataset and output must survive after its pod exits.
-PersistentVolumeClaims provide that continuity, and the serving Deployment mounts
-the checkpoint claim read-only. I also learned why readiness and liveness probes
-serve different purposes: readiness controls whether a pod receives traffic,
-whereas liveness allows Kubernetes to restart a broken process. Resource requests
-and limits, rolling updates, and the HorizontalPodAutoscaler turn the API into a
-more realistic service than simply running a container.
-
-Testing the system in layers was important. Unit tests caught interface problems
-without requiring a dataset download. A small smoke configuration then verified
-real training and checkpoint creation before the full ten-epoch run. Docker tests
-confirmed volume and user behavior, while the final Kubernetes validation checked
-the Job, persistent storage, two serving replicas, probes, Service, HPA, and a
-port-forwarded prediction. This staged approach made failures easier to isolate
-and produced clearer evidence for the final pull request.
-
+The final issue was resource monitoring on Docker Desktop Kubernetes. Metrics
+Server deployed but could not initially become available because of kubelet
+certificate validation in the local kind cluster. Applying the narrowly scoped
+`--kubelet-insecure-tls` patch allowed node and pod metrics to appear, after
+which the HPA reported valid CPU utilization with a 70% target and a two-to-five
+replica range. Working in layers (tests, smoke training, containers, the
+Kubernetes Job, serving, and autoscaling) made each failure easier to isolate
+and produced evidence I could verify at every stage.
