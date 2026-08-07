@@ -9,8 +9,8 @@ Obtain approval before creating each PR.
 
 ### Summary
 
-- Add the required repository structure, pinned dependency files, configuration,
-  ignore rules, and GitHub Actions workflow.
+- Add the project structure, pinned dependency files, YAML training
+  configurations, and Python project metadata.
 - Add documentation scaffolding for validation evidence and submission review.
 
 ### Validation
@@ -42,7 +42,7 @@ Obtain approval before creating each PR.
 
 - Add separate multi-stage training and serving images.
 - Run model serving as a non-root user with a health check.
-- Document mounted training, checkpoint persistence, and endpoint verification.
+- Add Docker build/test CI and exclude unnecessary files from image build contexts.
 
 ### Validation
 
@@ -58,7 +58,8 @@ Obtain approval before creating each PR.
 
 - Add the namespace, ConfigMap, PVC-backed training Job, serving Deployment,
   Service, probes, rolling strategy, resources, and HPA.
-- Add the Docker Desktop Kubernetes validation workflow.
+- Add infrastructure tests, the Docker Desktop Metrics Server patch, and
+  verified end-to-end validation evidence.
 
 ### Validation
 
