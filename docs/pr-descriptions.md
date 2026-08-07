@@ -5,7 +5,7 @@ Obtain approval before creating each PR.
 
 ## PR 1 - Project foundation (Week 1)
 
-**Title:** `chore: establish ML project foundation`
+**Title:** `task: establish ML project foundation`
 
 ### Summary
 
