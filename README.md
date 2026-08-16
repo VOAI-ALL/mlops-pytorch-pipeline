@@ -245,10 +245,3 @@ nodeSelector:
 
 The cluster must already have compatible NVIDIA drivers and the NVIDIA device
 plugin. The default submission remains portable and CPU-only.
-
-## Submission evidence
-
-Follow [docs/validation.md](docs/validation.md) while capturing genuine terminal
-output or screenshots. Review [docs/submission-checklist.md](docs/submission-checklist.md)
-before submitting the public repository URL, final PR URL, and personalized
-reflection.
