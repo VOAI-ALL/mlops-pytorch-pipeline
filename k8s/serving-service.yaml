@@ -8,6 +8,6 @@ spec:
     app: model-serving
   ports:
     - name: http
-      port: 8080
-      targetPort: http
+      port: 80
+      targetPort: 8080
   type: ClusterIP
